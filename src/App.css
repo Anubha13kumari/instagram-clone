@@ -3,7 +3,7 @@
 }
 .app{
  background-color:#fafafa;
- height:100vh;
+ height:100%;
 }
 
 .app__header {
@@ -11,4 +11,8 @@
   background-color: white;
   padding: 15px;
   border-bottom: 1px solid lightgray;
+}
+.app__signup{
+  display: flex;
+  flex-direction: column;
 }
