@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import Post from './Posts';
-import { db } from './firebase.js';
+import { auth, db } from './firebase.js';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -24,10 +24,37 @@ const style = {
 function App() {
   const [posts, setPosts] =useState([]);
   const [open, setOpen] = useState(false);
+  const [openSignIn, setOpenSignIn]=useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [user, setUser] =useState(null);
  
+  useEffect(() => {
+     const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if(authUser){
+        // user has logged in.....
+      console.log(authUser);
+      setUser(authUser);
+    if(authUser.displayName){
+    //  don't update username
+    }else{
+      //if we just created someone.....
+      return authUser.updateProfile({
+        displayName:username,
+      });
+    }
+
+      }else {
+        //user has logged out.......
+        setUser(null);
+      }
+     })
+     return () => {
+      // perform some cleanup action
+      unsubscribe();
+     }
+  },[user,username]);
   
   // const handleClose = () => setOpen(false);
   useEffect(() => {
@@ -40,11 +67,26 @@ function App() {
   }, []);
 
 const signUp =(event) => {
+ event.preventDefault();
 
+auth
+.createUserWithEmailAndPassword(email,password)
+.catch((error) => alert(error.message));
 }
+
+ const signIn =(event) => {
+ event.preventDefault();
+
+ auth
+ .signInWithEmailAndPassword(email, password)
+ .catch((error) => alert(error.message));
+
+ setOpenSignIn(false);
+ }
 
   return (
     <div className="app">
+       
        <Modal
         open={open}
         onClose={() => setOpen(false)}
@@ -76,16 +118,57 @@ const signUp =(event) => {
            value={password}
            onChange={(e) => setPassword(e.target.value)}></Input>
 
-           <Button onClick={signUp}>Sign Up</Button>
+           <Button type='submit' onClick={signUp}>Sign Up</Button>
            </form>
         </Box>
   </Modal>
-      <div className='app__header'>
-       
-      </div>
-       
-       <Button onClick={() => setOpen(true)}>Sign Up</Button>
 
+
+  <Modal
+        open={openSignIn}
+        onClose={() => setOpenSignIn(false)}
+  >
+     <Box sx={style}>
+          {/* <Typography id="modal-modal-title" variant="h6" component="h2">
+           I am a modal
+          </Typography> */}
+          <form className='app__signup'>
+          <center>
+          <img 
+          className='app__headerImage'
+           src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png' 
+           alt=''></img>
+          </center>
+          <Input
+           placeholder='email'
+           type='text'
+           value={email}
+           onChange={(e) => setEmail(e.target.value)}></Input>
+           <Input
+           placeholder='password'
+           type='password'
+           value={password}
+           onChange={(e) => setPassword(e.target.value)}></Input>
+
+           <Button type='submit' onClick={signIn}>Sign In</Button>
+           </form>
+        </Box>
+  </Modal>
+     
+  <div className='app__header'>
+       <img 
+          className='app__headerImage'
+           src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png' 
+           alt=''></img>
+            </div>
+        {user ? (
+           <Button onClick={() => auth.signOut()}>Logout</Button>
+        ): ( 
+          <div className='app__loginContainer'>  
+       <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+       <Button onClick={() => setOpen(true)}>Sign Up</Button>
+       </div> 
+       )}
       {
         posts.map(({id,post}) => 
         <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl}></Post>

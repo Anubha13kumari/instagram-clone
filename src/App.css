@@ -9,9 +9,10 @@
 .app__header {
   object-fit: contain;
   background-color: white;
-  padding: 15px;
+  padding: 6px;
   border-bottom: 1px solid lightgray;
 }
+
 .app__signup{
   display: flex;
   flex-direction: column;
