@@ -8,7 +8,7 @@ function ImageUpload(username) {
     const [caption, setCaption] =useState('');
     const [image, setImage]= useState('');
     const [progress,setProgress] =useState(0);
-    const [url, setUrl]=useState('');
+    // const [url, setUrl]=useState('');
 
     const handleChange=(e)=> {
       if(e.target.files[0]) {
@@ -56,7 +56,7 @@ function ImageUpload(username) {
     }
   return (
     <div>
-      <process value={progress} max="100"></process>
+      <progress value={progress} max="100"></progress>
         <input type='text' placeholder='enter the caption....' onChange={event =>setCaption(event.target.value)} value={caption}></input>
         <input type='file' onChange={handleChange}/>
         <Button onClick={handleUpload}>

@@ -3,7 +3,7 @@ import './App.css';
 import Post from './Posts';
 import { auth, db } from './firebase.js';
 import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Button, Input} from '@mui/material';
 import ImageUpload from './ImageUpload';
@@ -59,10 +59,11 @@ function App() {
   
   // const handleClose = () => setOpen(false);
   useEffect(() => {
-    db.collection('posts').onSnapshot(snapshot => {
+    db.collection('posts').orderBy('timestamp','desc').onSnapshot(snapshot => {
+      // every time a new post is added, this code fires....
       setPosts(snapshot.docs.map(doc =>({
-      id:doc.id,
-        post: doc.data()
+      id: doc.id,
+      post: doc.data()
       })));
     })
   }, []);
