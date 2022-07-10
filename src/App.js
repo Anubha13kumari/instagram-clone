@@ -83,6 +83,7 @@ auth
 
  auth
  .signInWithEmailAndPassword(email, password)
+ .then(() => setOpenSignIn(false))
  .catch((error) => alert(error.message));
 
  setOpenSignIn(false);

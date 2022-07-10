@@ -33,7 +33,7 @@ function Posts({ postId,user, username,caption,imageUrl }) {
     username:user.displayName,
     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
   });
-  setComments('');
+  setComments([]);
   }
 
   return (
@@ -52,11 +52,12 @@ function Posts({ postId,user, username,caption,imageUrl }) {
         <h4 className='post__text'><strong>{username.username}</strong> {caption}</h4>
 
         <div className='post__comments'>
-          {comments.map((comment) => {
+          <h6 style={{color:808080}}>Comments</h6>
+          {comments.map((comment) => (
             <p>
-              <strong>{comment.username}</strong> {comment.text}
+              <strong style={{marginRight:3}}>{comment.username}</strong> {comment.text}
             </p>
-          })}
+          ))}
         </div>
 
         {user && (
