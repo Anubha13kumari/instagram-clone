@@ -9,6 +9,7 @@ import { Button, Input} from '@mui/material';
 import ImageUpload from './ImageUpload';
 
 
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -73,6 +74,7 @@ const signUp =(event) => {
 
 auth
 .createUserWithEmailAndPassword(email,password)
+.then(()=>setOpenSignIn(false))
 .catch((error) => alert(error.message));
 }
 
@@ -88,13 +90,6 @@ auth
 
   return (
     <div className="app">
-       
-       {user?.displayName ? (
-        <ImageUpload username={user.displayName}/>
-       ):(
-        <h3>Sorry you need to login to Upload</h3>
-       )}
-       
        <Modal
         open={open}
         onClose={() => setOpen(false)}
@@ -168,20 +163,28 @@ auth
           className='app__headerImage'
            src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png' 
            alt=''></img>
-            </div>
-        {user ? (
+             {user ? (
            <Button onClick={() => auth.signOut()}>Logout</Button>
         ): ( 
           <div className='app__loginContainer'>  
-       <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+       <Button onClick={() => setOpenSignIn(true)}>Login</Button>
        <Button onClick={() => setOpen(true)}>Sign Up</Button>
        </div> 
        )}
-      {
+            </div>
+       <div className='app__posts'>
+       {
         posts.map(({id,post}) => 
-        <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl}></Post>
+        <Post key={id} postId={id} user={user} username={post.username} caption={post.caption} imageUrl={post.imageUrl}></Post>
         )
       }
+       </div>
+       {user?.displayName ? (
+        <ImageUpload username={user.displayName}/>
+       ):(
+        <h3>Sorry you need to login to Upload</h3>
+       )}
+
       {/* <Post username="cleverQazi" caption="Wow it works" imageUrl="https://www.softwarecraftsperson.com/images/react-js.jpg"></Post>
       <Post  username="clever" caption="instagram clone" imageUrl="https://images.news18.com/ibnlive/uploads/2021/08/1628397369_cat-stereotypes.jpg"></Post>
     <Post username="pomerian" caption="I am cute" imageUrl="https://www.pupvine.com/wp-content/uploads/2021/07/white-teacup-pomeranian-puppy.jpeg"></Post> */}

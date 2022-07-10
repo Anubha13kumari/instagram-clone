@@ -22,3 +22,22 @@
 .post__avatar{
     margin-right: 10px;
 }
+.post__commentbox{
+   display: flex;
+   margin-top: 20px; 
+}
+.post__input{
+    flex:1;
+    border:none;
+    padding: 10px;
+    border-top: 1px solid lightgrey;
+
+}
+
+.post__button{
+    flex:0;
+    border: none;
+    border-top: 1px solid lightgrey;
+    background-color: transparent;
+    color: rgb(7, 69, 140);
+}
