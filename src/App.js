@@ -74,7 +74,7 @@ const signUp =(event) => {
 
 auth
 .createUserWithEmailAndPassword(email,password)
-.then(()=>setOpenSignIn(false))
+.then(()=>setOpen(false))
 .catch((error) => alert(error.message));
 }
 
